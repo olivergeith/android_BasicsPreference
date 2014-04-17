@@ -4,7 +4,7 @@
  * Licensed under the MIT License (see LICENSE.txt)
  */
 
-package net.jayschwa.android.preference;
+package de.geithonline.android.basics.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -44,7 +44,7 @@ public class SliderPreference extends DialogPreference {
 	}
 
 	private void setup(final Context context, final AttributeSet attrs) {
-		setDialogLayoutResource(R.layout.slider_preference_dialog);
+		setDialogLayoutResource(R.layout.slider_preference);
 		final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SliderPreference);
 		a.recycle();
 	}
