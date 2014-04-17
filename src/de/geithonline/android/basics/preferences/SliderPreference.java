@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Jay Weisskopf
+ * Copyright 2012 Oliver Geith
  *
  * Licensed under the MIT License (see LICENSE.txt)
  */
@@ -15,7 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
- * @author Jay Weisskopf
+ * @author Oliver Geith
  */
 public class SliderPreference extends DialogPreference {
 
