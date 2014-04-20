@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+	<string-array name="listNames">
+		<item>"Emo"</item>
+		<item>"Help"</item>
+		<item>"Info"</item>
+	</string-array>
+	
+	<string-array name="listValues">
+		<item>"1"</item>
+		<item>"2"</item>
+		<item>"3"</item>
+	</string-array>
+		
+	<array name="imageValues">
+		<item>@drawable/ic_menu_emoticons</item>
+		<item>@drawable/ic_menu_help</item>
+		<item>@drawable/ic_menu_info_details</item>
+	</array>
+
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:imagelistpreference="http://schemas.android.com/apk/lib/de.geithonline.android.basics.preferences.imagelistpreference">
+
+	<de.geithonline.android.basics.preferences.imagelistpreference.ImageListPreference
+		android:key="imageList"
+		android:title="Title"
+		android:summary="Summary"
+		android:entries="@array/listNames"
+		android:entryValues="@array/listValues"
+		imagelistpreference:entryImages="@array/imageValues"
+	/>
+
+</PreferenceScreen>
