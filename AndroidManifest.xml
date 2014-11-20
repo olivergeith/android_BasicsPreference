@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright 2012 Jay Weisskopf
+Copyright 2012 Oliover Geith
 
 Licensed under the MIT License (see LICENSE.txt)
 -->
@@ -11,6 +11,6 @@ Licensed under the MIT License (see LICENSE.txt)
 
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
 </manifest>
