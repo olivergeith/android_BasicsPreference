@@ -10,6 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +18,8 @@ import android.widget.LinearLayout;
 /**
  * A preference type that allows a user to choose a time
  */
-public class ColorPickerPreference extends Preference implements Preference.OnPreferenceClickListener, ColorPickerDialog.OnColorChangedListener {
+public class ColorPickerPreference extends Preference implements Preference.OnPreferenceClickListener,
+		ColorPickerDialog.OnColorChangedListener {
 
 	View mView;
 	ColorPickerDialog mDialog;
@@ -67,6 +69,12 @@ public class ColorPickerPreference extends Preference implements Preference.OnPr
 		setPreviewColor();
 	}
 
+	public void update() {
+		final int color = getPersistedInt(Color.BLACK);
+		Log.i("ColorPickerPreference", "update to " + color);
+		onColorChanged(getPersistedInt(color));
+	}
+
 	private void setPreviewColor() {
 		if (mView == null) {
 			return;
@@ -77,7 +85,8 @@ public class ColorPickerPreference extends Preference implements Preference.OnPr
 			return;
 		}
 		widgetFrameView.setVisibility(View.VISIBLE);
-		widgetFrameView.setPadding(widgetFrameView.getPaddingLeft(), widgetFrameView.getPaddingTop(), (int) (mDensity * 8), widgetFrameView.getPaddingBottom());
+		widgetFrameView.setPadding(widgetFrameView.getPaddingLeft(), widgetFrameView.getPaddingTop(),
+				(int) (mDensity * 8), widgetFrameView.getPaddingBottom());
 		// remove already create preview image
 		final int count = widgetFrameView.getChildCount();
 		if (count > 0) {
