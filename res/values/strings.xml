@@ -4,5 +4,7 @@
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
     <string name="press_color_to_apply">Press on Color to apply</string>    
+    <string name="demo_min_label">Min</string>
+    <string name="demo_max_label">Max</string>
     
 </resources>
