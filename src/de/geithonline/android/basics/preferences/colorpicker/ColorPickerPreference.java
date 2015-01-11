@@ -10,7 +10,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,7 +70,7 @@ public class ColorPickerPreference extends Preference implements Preference.OnPr
 
 	public void update() {
 		final int color = getPersistedInt(Color.BLACK);
-		Log.i("ColorPickerPreference", "update to " + color);
+		// Log.i("ColorPickerPreference", "update to " + color);
 		onColorChanged(getPersistedInt(color));
 	}
 
