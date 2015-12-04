@@ -12,7 +12,8 @@ import android.widget.ImageView;
 
 public class IconOnlyPreference extends Preference {
 
-	private ImageView mImage;
+	private ImageView mImageView;
+
 	private Bitmap mPhoto;
 	private View view;
 
@@ -25,24 +26,22 @@ public class IconOnlyPreference extends Preference {
 		final LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (view == null) {
 			view = li.inflate(R.layout.icon_only_preference, parent, false);
-			mImage = (ImageView) view.findViewById(R.id.icon_only_view);
-			Log.i("IconOnlyView", "(onCreateView) mImage == " + mImage);
+			mImageView = (ImageView) view.findViewById(R.id.icon_only_view);
 		}
-		if (mImage != null && mPhoto != null) {
-			mImage.setImageBitmap(mPhoto);
+		if (mImageView != null && mPhoto != null) {
+			mImageView.setImageBitmap(mPhoto);
 		}
-		// super.onCreateView(parent);
+
 		return view;
 
 	}
 
 	public void setImage(final Bitmap bitmap) {
 		mPhoto = bitmap;
-		if (mImage != null) {
-			Log.i("IconOnlyView", "(setImage) mImage == " + mImage);
-			mImage.setImageBitmap(mPhoto);
+		if (mImageView != null) {
+			mImageView.setImageBitmap(mPhoto);
 		} else {
-			Log.i("IconOnlyView", "(setImage) mImage == " + mImage);
+			Log.e("IconOnlyView", "mImageView == " + mImageView);
 		}
 	}
 }
