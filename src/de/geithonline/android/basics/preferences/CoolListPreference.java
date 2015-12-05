@@ -11,6 +11,12 @@ public class CoolListPreference extends ListPreference {
 
 	public CoolListPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
+
+		// setSummary(getEntry());
+	}
+
+	@Override
+	protected View onCreateView(final ViewGroup parent) {
 		setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override
@@ -19,12 +25,6 @@ public class CoolListPreference extends ListPreference {
 				return true;
 			}
 		});
-
-		setSummary(getEntry());
-	}
-
-	@Override
-	protected View onCreateView(final ViewGroup parent) {
 		setSummary(getEntry());
 		return super.onCreateView(parent);
 	}
