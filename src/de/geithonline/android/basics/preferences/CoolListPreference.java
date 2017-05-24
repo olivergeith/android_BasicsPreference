@@ -11,8 +11,6 @@ public class CoolListPreference extends ListPreference {
 
 	public CoolListPreference(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
-
-		// setSummary(getEntry());
 	}
 
 	@Override
