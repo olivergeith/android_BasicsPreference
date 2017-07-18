@@ -1,15 +1,13 @@
 
 package de.geithonline.android.basics.preferences;
 
-import java.util.StringTokenizer;
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar;
 import de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar.OnRangeSeekBarChangeListener;
 
@@ -38,53 +36,61 @@ public final class RangeSeekBarPreference extends DialogPreference {
     // Namespaces to read attributes
     // http://schemas.android.com/apk/lib/de.geithonline.android.basics.preferences
     private static final String PREFERENCE_NS = "http://schemas.android.com/apk/lib/de.geithonline.android.basics.preferences";
-    private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
+    // private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
     // Real defaults
-    private final String mDefaultValue;
-    private final int absolutMaxValue;
+    private final int absoluteMaxValue;
     private final int absoluteMinValue;
     private final int stepValue;
 
     // Current value
-    private String mCurrentValue;
-    private int currentMinValue;
-    private int currentMaxValue;
+    private int currentMinValue = 0;
+    private int currentMaxValue = 0;
 
     // View elements
     private RangeSeekBar<Integer> rangeSeekBar;
-    private TextView mValueText;
+    private final String keyMinValue;
+    private final String keyMaxValue;
+    private final int defaultMaxValue;
+    private final int defaultMinValue;
 
     public RangeSeekBarPreference(final Context context, final AttributeSet attrs) {
         super(context, attrs);
 
         // Read parameters from attributes
+        defaultMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, "defaultMinValue", 0);
+        defaultMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, "defaultMaxValue", 100);
         absoluteMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, "absoluteMinValue", 0);
-        absolutMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, "absoluteMaxValue", 100);
+        absoluteMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, "absoluteMaxValue", 100);
         stepValue = attrs.getAttributeIntValue(PREFERENCE_NS, "step", 1);
-        mDefaultValue = attrs.getAttributeValue(ANDROID_NS, "10-90");
-        // Log.i("SEEKBAR", "minValue=" + mMinValue);
-        // Log.i("SEEKBAR", "maxValue=" + mMaxValue);
+        keyMinValue = attrs.getAttributeValue(PREFERENCE_NS, "keyMinValue");
+        keyMaxValue = attrs.getAttributeValue(PREFERENCE_NS, "keyMaxValue");
+    }
+
+    private static int readIntegerPref(final SharedPreferences prefs, final String key, final int defaultValue) {
+        if (prefs == null) {
+            return defaultValue;
+        }
+        return prefs.getInt(key, defaultValue);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected View onCreateDialogView() {
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         // Get current value from preferences
-        mCurrentValue = getPersistedString(mDefaultValue);
-        initSelectedValues(mCurrentValue);
+        currentMinValue = readIntegerPref(prefs, keyMinValue, defaultMinValue);
+        currentMaxValue = readIntegerPref(prefs, keyMaxValue, defaultMaxValue);
 
         // Inflate layout
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.range_seek_bar_preference, null);
-
         // Setup minimum and maximum text labels
-        ((TextView) view.findViewById(R.id.min_value)).setText(Integer.toString(absoluteMinValue));
-        ((TextView) view.findViewById(R.id.max_value)).setText(Integer.toString(absolutMaxValue));
-        mValueText = (TextView) view.findViewById(R.id.current_value);
         rangeSeekBar = (RangeSeekBar<Integer>) view.findViewById(R.id.rangebar);
 
-        rangeSeekBar.setRangeValues(absoluteMinValue, absolutMaxValue, stepValue);
+        rangeSeekBar.setRangeValues(absoluteMinValue, absoluteMaxValue, stepValue);
         rangeSeekBar.setSelectedMinValue(currentMinValue);
         rangeSeekBar.setSelectedMaxValue(currentMaxValue);
         // Sets the display values of the indices
@@ -92,8 +98,6 @@ public final class RangeSeekBarPreference extends DialogPreference {
 
             @Override
             public void onRangeSeekBarValuesChanged(final RangeSeekBar<Integer> bar, final Integer minValue, final Integer maxValue) {
-                mValueText.setText(minValue + "-" + maxValue);
-                mCurrentValue = minValue + "-" + maxValue;
                 currentMinValue = minValue.intValue();
                 currentMaxValue = maxValue.intValue();
             }
@@ -101,14 +105,18 @@ public final class RangeSeekBarPreference extends DialogPreference {
         });
 
         // Setup text label for current value
-        mValueText.setText(rangeSeekBar.getSelectedMinValue() + "-" + rangeSeekBar.getSelectedMaxValue());
 
         return view;
+    }
+
+    private String generateValueString() {
+        return currentMinValue + " - " + currentMaxValue;
     }
 
     @Override
     protected void onDialogClosed(final boolean positiveResult) {
         super.onDialogClosed(positiveResult);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         // Return if change was cancelled
         if (!positiveResult) {
@@ -117,7 +125,9 @@ public final class RangeSeekBarPreference extends DialogPreference {
 
         // Persist current value if needed
         if (shouldPersist()) {
-            persistString(mCurrentValue);
+            persistString(generateValueString());
+            prefs.edit().putInt(keyMinValue, currentMinValue).commit();
+            prefs.edit().putInt(keyMaxValue, currentMaxValue).commit();
         }
 
         // Notify activity about changes (to update preference summary line)
@@ -131,23 +141,7 @@ public final class RangeSeekBarPreference extends DialogPreference {
         if (super.getSummary() != null) {
             summary = super.getSummary().toString();
         }
-        final String value = getPersistedString(mDefaultValue);
+        final String value = getPersistedString(generateValueString());
         return String.format(summary, value);
     }
-
-    private void initSelectedValues(final String currentValue) {
-        // Tokenizer initialisieren
-        final StringTokenizer tokenizer = new StringTokenizer(currentValue, "-", false);
-        // Daten lesen in einen Vector einlesen
-        if (tokenizer.countTokens() == 2) {
-            try {
-                currentMinValue = Integer.parseInt(tokenizer.nextToken());
-                currentMaxValue = Integer.parseInt(tokenizer.nextToken());
-            } catch (final NumberFormatException e) {
-                Log.i("initSelectedValues", "Read String was " + currentValue);
-                return;
-            }
-        }
-    }
-
 }

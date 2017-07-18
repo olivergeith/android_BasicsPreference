@@ -14,15 +14,14 @@ Licensed under the MIT License (see LICENSE.txt)
 	</declare-styleable>
 
     <declare-styleable name="de.geithonline.android.basics.preferences.RangeSeekBarPreference">
-        <!-- the minimum of the range -->
+        <attr name="defaultMinValue" format="integer|float"/>
+        <attr name="defaultMaxValue" format="integer|float"/>
         <attr name="absoluteMinValue" format="integer|float"/>
-
-        <!-- the maximum of the range -->
         <attr name="absoluteMaxValue" format="integer|float"/>
-
-        <!-- the step value -->
         <attr name="step" format="integer|float"/>
-	</declare-styleable>
+		<attr name="keyMinValue" format="string" />
+		<attr name="keyMaxValue" format="string" />
+   	</declare-styleable>
     
     
     <declare-styleable name="ImageListPreference">

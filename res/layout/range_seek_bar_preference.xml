@@ -7,14 +7,6 @@
 	android:paddingTop="10dp"
 	android:paddingBottom="20dp">
 
-	<TextView
-		android:id="@+id/current_value"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
-		android:textSize="23sp" 
-		/>
 
 	<de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar
             xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -24,7 +16,7 @@
             android:layout_marginBottom="50dp"
             android:layout_marginTop="50dp" />
 			
-	
+<!-- 	
 	<TextView
 		android:id="@+id/min_value"
 		android:layout_width="wrap_content"
@@ -40,5 +32,5 @@
 		android:layout_above="@id/rangebar"
 		android:layout_alignParentRight="true"
 		/>		
-				
+	 -->			
 </RelativeLayout>
