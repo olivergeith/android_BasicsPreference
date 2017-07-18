@@ -7,30 +7,12 @@
 	android:paddingTop="10dp"
 	android:paddingBottom="20dp">
 
-
 	<de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/rangebar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="50dp" />
+	    xmlns:custom="http://schemas.android.com/apk/res-auto"
+	    android:id="@+id/rangebar"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true" />
 			
-<!-- 	
-	<TextView
-		android:id="@+id/min_value"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_above="@id/rangebar"
-		android:layout_alignParentLeft="true"
-		/>
-
-	<TextView
-		android:id="@+id/max_value"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_above="@id/rangebar"
-		android:layout_alignParentRight="true"
-		/>		
-	 -->			
 </RelativeLayout>

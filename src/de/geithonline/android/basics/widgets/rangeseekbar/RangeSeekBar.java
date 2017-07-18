@@ -649,7 +649,7 @@ public class RangeSeekBar<T extends Number>extends ImageView {
         drawThumb(normalizedToScreen(normalizedMaxValue), Thumb.MAX.equals(pressedThumb), canvas, selectedValuesAreDefault);
 
         // draw the text if sliders have moved from default edges
-        if (showTextAboveThumbs && (activateOnDefaultValues || !selectedValuesAreDefault)) {
+        if (showTextAboveThumbs /* && (activateOnDefaultValues || !selectedValuesAreDefault) */) {
             paint.setTextSize(textSize);
             paint.setColor(textAboveThumbsColor);
 
