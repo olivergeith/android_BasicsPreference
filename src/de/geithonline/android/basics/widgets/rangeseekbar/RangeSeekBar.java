@@ -135,6 +135,7 @@ public class RangeSeekBar<T extends Number>extends ImageView {
     private final Matrix thumbShadowMatrix = new Matrix();
 
     private boolean activateOnDefaultValues;
+    private boolean moveLabelsOnOverlap;
 
     public RangeSeekBar(final Context context) {
         super(context);
@@ -190,7 +191,8 @@ public class RangeSeekBar<T extends Number>extends ImageView {
             thumbShadowXOffset = defaultShadowXOffset;
             thumbShadowYOffset = defaultShadowYOffset;
             thumbShadowBlur = defaultShadowBlur;
-            activateOnDefaultValues = false;
+            activateOnDefaultValues = true;
+            moveLabelsOnOverlap = false;
         } else {
             final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0);
             try {
@@ -201,6 +203,7 @@ public class RangeSeekBar<T extends Number>extends ImageView {
                 textAboveThumbsColor = a.getColor(R.styleable.RangeSeekBar_textAboveThumbsColor, Color.WHITE);
                 singleThumb = a.getBoolean(R.styleable.RangeSeekBar_singleThumb, false);
                 showLabels = a.getBoolean(R.styleable.RangeSeekBar_showLabels, true);
+                moveLabelsOnOverlap = a.getBoolean(R.styleable.RangeSeekBar_moveLabelsOnOverlap, false);
                 internalPad = a.getDimensionPixelSize(R.styleable.RangeSeekBar_internalPadding, INITIAL_PADDING_IN_DP);
                 barHeight = a.getDimensionPixelSize(R.styleable.RangeSeekBar_barHeight, LINE_HEIGHT_IN_DP);
                 activeColor = a.getColor(R.styleable.RangeSeekBar_activeColor, ACTIVE_COLOR);
@@ -607,8 +610,10 @@ public class RangeSeekBar<T extends Number>extends ImageView {
 
         if (showLabels) {
             // draw min and max labels
-            final String minLabel = getContext().getString(R.string.demo_min_label);
-            final String maxLabel = getContext().getString(R.string.demo_max_label);
+            // final String minLabel = getContext().getString(R.string.demo_min_label);
+            // final String maxLabel = getContext().getString(R.string.demo_max_label);
+            final String minLabel = absoluteMinValue.toString();
+            final String maxLabel = absoluteMaxValue.toString();
             minMaxLabelSize = Math.max(paint.measureText(minLabel), paint.measureText(maxLabel));
             final float minMaxHeight = textOffset + thumbHalfHeight + textSize / 3;
             canvas.drawText(minLabel, 0, minMaxHeight, paint);
@@ -663,18 +668,19 @@ public class RangeSeekBar<T extends Number>extends ImageView {
 
             if (!singleThumb) {
                 // check if the labels overlap, or are too close to each other
-                final int spacing = PixelUtil.dpToPx(getContext(), TEXT_LATERAL_PADDING_IN_DP);
-                final float overlap = minPosition + minTextWidth - maxPosition + spacing;
-                if (overlap > 0f) {
-                    // we could move them the same ("overlap * 0.5f")
-                    // but we rather move more the one which is farther from the ends, as it has more space
-                    minPosition -= overlap * normalizedMinValue / (normalizedMinValue + 1 - normalizedMaxValue);
-                    maxPosition += overlap * (1 - normalizedMaxValue) / (normalizedMinValue + 1 - normalizedMaxValue);
+                if (moveLabelsOnOverlap) {
+                    final int spacing = PixelUtil.dpToPx(getContext(), TEXT_LATERAL_PADDING_IN_DP);
+                    final float overlap = minPosition + minTextWidth - maxPosition + spacing;
+                    if (overlap > 0f) {
+                        // we could move them the same ("overlap * 0.5f")
+                        // but we rather move more the one which is farther from the ends, as it has more space
+                        minPosition -= overlap * normalizedMinValue / (normalizedMinValue + 1 - normalizedMaxValue);
+                        maxPosition += overlap * (1 - normalizedMaxValue) / (normalizedMinValue + 1 - normalizedMaxValue);
+                    }
                 }
                 canvas.drawText(minText, minPosition, distanceToTop + textSize, paint);
 
             }
-
             canvas.drawText(maxText, maxPosition, distanceToTop + textSize, paint);
         }
 

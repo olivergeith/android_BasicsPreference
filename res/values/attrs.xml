@@ -44,6 +44,9 @@ Licensed under the MIT License (see LICENSE.txt)
 
         <!-- show the labels on the right and left-->
         <attr name="showLabels" format="boolean"/>
+        
+        <!-- moves the two lable out of their way if overlapping-->
+        <attr name="moveLabelsOnOverlap" format="boolean"/>
 
         <!-- alwaysActive will make the buttons and bar always draw as the activeColor (the default is false) -->
         <attr name="alwaysActive" format="boolean"/>
