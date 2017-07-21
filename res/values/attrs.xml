@@ -6,6 +6,17 @@ Licensed under the MIT License (see LICENSE.txt)
 -->
 <resources>
 
+    <declare-styleable name="HueSeekBar">
+        <attr name="colorEmpty" format="color"/>
+        <attr name="colorFill" format="color"/>
+        <attr name="colorToggle" format="color"/>
+        <attr name="maxProgress" format="integer"/>
+        <attr name="currentProgress" format="integer"/>
+        <attr name="bottomSeekHeight" format="dimension"/>
+        <attr name="bottomSeekToggleWidth" format="dimension"/>
+    </declare-styleable>
+    
+    
     
     <declare-styleable name="de.geithonline.android.basics.preferences.SeekBarPreference">
 		<attr name="minValue" format="integer" />
