@@ -57,7 +57,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 	@Override
 	protected View onCreateView(final ViewGroup parent) {
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View view = inflater.inflate(R.layout.preference_inline_seekbar, parent, false);
+		final View view = inflater.inflate(R.layout.inline_seekbar_preference, parent, false);
 		mValueText = (TextView) view.findViewById(R.id.current_value);
 		mMinText = (TextView) view.findViewById(R.id.min_value);
 		mMaxText = (TextView) view.findViewById(R.id.max_value);
@@ -103,11 +103,11 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 
 	@Override
 	public void onStartTrackingTouch(final SeekBar seekBar) {
-		// not used
 	}
 
 	@Override
 	public void onStopTrackingTouch(final SeekBar seekBar) {
+		// mValueText.setText("");
 		persistPreferences();
 	}
 
