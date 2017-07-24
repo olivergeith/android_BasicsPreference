@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +50,8 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 		mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE, DEFAULT_CURRENT_VALUE);
 		// Get current value from preferences
 		readPreferences();
-		Log.i("InlineSeek " + getTitle().toString(), "Construcktor - key= " + getKey() + "shouldPersist=" + shouldPersist());
-		Log.i("InlineSeek " + getTitle().toString(), "Construcktor - current= " + mCurrentValue);
+		// Log.i("InlineSeek " + getTitle().toString(), "Construcktor - key= " + getKey() + "shouldPersist=" + shouldPersist());
+		// Log.i("InlineSeek " + getTitle().toString(), "Construcktor - current= " + mCurrentValue);
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 		mMaxText = (TextView) view.findViewById(R.id.max_value);
 
 		mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
-		Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
+		// Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
 		mSeekBar.setMax(mMaxValue - mMinValue);
 		mSeekBar.setProgress(mCurrentValue - mMinValue);
 		mSeekBar.setOnSeekBarChangeListener(this);
@@ -80,7 +79,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 	@Override
 	protected void onBindView(final View view) {
 		super.onBindView(view);
-		Log.i("InlineSeek " + getTitle().toString(), "onBindView - cureent " + mCurrentValue);
+		// Log.i("InlineSeek " + getTitle().toString(), "onBindView - cureent " + mCurrentValue);
 		readPreferences();
 		mSeekBar.setProgress(mCurrentValue - mMinValue);
 		// mSeekBar.setMax(mMaxValue - mMinValue);
@@ -98,7 +97,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 
 	@Override
 	protected Object onGetDefaultValue(final TypedArray a, final int index) {
-		Log.i("InlineSeek ", "onGetDefaultValue - current " + mDefaultValue);
+		// Log.i("InlineSeek ", "onGetDefaultValue - current " + mDefaultValue);
 		return mDefaultValue;
 	}
 
@@ -119,7 +118,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 
 	@Override
 	public CharSequence getSummary() {
-		Log.i("InlineSeek " + getTitle().toString(), "getSummary");
+		// Log.i("InlineSeek " + getTitle().toString(), "getSummary");
 		// Format summary string with current value
 		String summary = "";
 		if (super.getSummary() != null) {
@@ -140,13 +139,13 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 	public void persistPreferences() {
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.edit().putInt(getKey(), mCurrentValue).commit();
-		Log.i("InlineSeek", "persistPreferences: " + mCurrentValue);
+		// Log.i("InlineSeek", "persistPreferences: " + mCurrentValue);
 	}
 
 	private void readPreferences() {
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		mCurrentValue = readIntegerPref(prefs, getKey(), mDefaultValue);
-		Log.i("InlineSeek", "readPreferences: " + mCurrentValue);
+		// Log.i("InlineSeek", "readPreferences: " + mCurrentValue);
 	}
 
 	private static int readIntegerPref(final SharedPreferences prefs, final String key, final int defaultValue) {
