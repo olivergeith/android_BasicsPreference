@@ -9,11 +9,13 @@
         android:id="@android:id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:gravity="left"
         android:text="title"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorHighlight"
+        android:textSize="16sp"
+         />
     
 	<de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar
 	    xmlns:custom="http://schemas.android.com/apk/res-auto"
@@ -21,16 +23,17 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentRight="true" />
+	    android:layout_alignParentRight="true"
+	    android:layout_marginEnd="4dp"
+	    android:layout_marginStart="16dp" />
 		
 	<TextView
-        android:id="@android:id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginStart="8dp"
-        android:text="summary"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-	
+	    android:id="@android:id/summary"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginBottom="6dp"
+	    android:layout_marginStart="16dp"
+	    android:text="summary"
+	    android:textAppearance="?android:attr/textAppearanceSmall" />
 		
 </LinearLayout>
