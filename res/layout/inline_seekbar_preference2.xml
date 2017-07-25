@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="6dp"
     android:gravity="center_vertical"
     android:orientation="vertical" >
 
@@ -41,9 +42,10 @@
 
         <TextView
             android:id="@+id/min_value"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="6dp"
             android:layout_marginStart="16dp"
             android:layout_weight="0.10"
             android:gravity="left"
@@ -53,27 +55,22 @@
             android:id="@+id/seekbar"
             android:layout_width="214dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
             android:layout_weight="0.75"
             android:thumb="@drawable/seek_thumb_normal_small" />
 
         <TextView
             android:id="@+id/max_value"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_width="20dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="6dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="0.15"
             android:gravity="right"
             android:text="100" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@android:id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginStart="16dp"
-        android:text="summary"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

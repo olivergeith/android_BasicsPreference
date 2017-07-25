@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical"
     android:orientation="vertical" >
-    
+
     <TextView
         android:id="@android:id/title"
         android:layout_width="match_parent"
@@ -12,7 +12,8 @@
         android:layout_marginStart="16dp"
         android:gravity="left"
         android:text="title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorHighlight"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -22,46 +23,56 @@
 
         <TextView
             android:id="@+id/min_value"
-            android:layout_width="42dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
+            android:layout_weight="0.10"
             android:gravity="left"
             android:text="0" />
 
-        <TextView
-            android:id="@+id/current_value"
+        <SeekBar
+            android:id="@+id/seekbar"
             android:layout_width="214dp"
             android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:thumb="@drawable/seek_thumb_normal_small" />
+
+        <TextView
+            android:id="@+id/max_value"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.15"
+            android:gravity="right"
+            android:text="100" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/current_value"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="6dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="0.15"
+            android:gravity="left"
             android:text="50"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/max_value"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
-            android:gravity="right"
-            android:text="100" />
-
-    </LinearLayout>
-    
-        <SeekBar
-            android:id="@+id/seekbar"
-            android:layout_width="match_parent"
+            android:id="@android:id/summary"
+            android:layout_width="214dp"
             android:layout_height="wrap_content"
-            android:thumb="@drawable/seek_thumb_normal_small" />
-    
-    <TextView
-        android:id="@android:id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_marginStart="16dp"
-        android:text="summary"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+            android:layout_marginBottom="6dp"
+            android:layout_weight="0.85"
+            android:text="summary"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -24,16 +24,8 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentRight="true"
+	    android:layout_marginBottom="6dp"
 	    android:layout_marginEnd="4dp"
 	    android:layout_marginStart="16dp" />
-		
-	<TextView
-	    android:id="@android:id/summary"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginBottom="6dp"
-	    android:layout_marginStart="16dp"
-	    android:text="summary"
-	    android:textAppearance="?android:attr/textAppearanceSmall" />
 		
 </LinearLayout>

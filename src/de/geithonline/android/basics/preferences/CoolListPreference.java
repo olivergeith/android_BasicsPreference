@@ -1,3 +1,4 @@
+
 package de.geithonline.android.basics.preferences;
 
 import android.content.Context;
@@ -9,22 +10,22 @@ import android.view.ViewGroup;
 
 public class CoolListPreference extends ListPreference {
 
-	public CoolListPreference(final Context context, final AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public CoolListPreference(final Context context, final AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	@Override
-	protected View onCreateView(final ViewGroup parent) {
-		setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+    @Override
+    protected View onCreateView(final ViewGroup parent) {
+        setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-			@Override
-			public boolean onPreferenceChange(final Preference preference, final Object newValue) {
-				setSummary("" + newValue);
-				return true;
-			}
-		});
-		setSummary(getEntry());
-		return super.onCreateView(parent);
-	}
+            @Override
+            public boolean onPreferenceChange(final Preference preference, final Object newValue) {
+                setSummary("" + newValue);
+                return true;
+            }
+        });
+        setSummary(getEntry());
+        return super.onCreateView(parent);
+    }
 
 }

@@ -102,11 +102,7 @@ public final class InlineRangeSeekBarPreference extends Preference {
     @Override
     public CharSequence getSummary() {
         // Format summary string with current value
-        String summary = "";
-        if (super.getSummary() != null) {
-            summary = super.getSummary().toString();
-        }
         final String value = generateValueString();
-        return String.format(summary, value);
+        return String.format("%1$s", value);
     }
 }
