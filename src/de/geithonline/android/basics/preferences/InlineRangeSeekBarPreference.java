@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +62,7 @@ public final class InlineRangeSeekBarPreference extends Preference {
         readPreferences();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected View onCreateView(final ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,9 +75,9 @@ public final class InlineRangeSeekBarPreference extends Preference {
         if (titleView != null) {
             titleView.setText(getTitle());
             titleView.setTextColor(colorStateList);
-            Log.i("Titleview", "" + titleView.getText());
+            // Log.i("Titleview", "" + titleView.getText());
         } else {
-            Log.i("Titleview", "null");
+            // Log.i("Titleview", "null");
         }
 
         rangeSeekBar.setRangeValues(absoluteMinValue, absoluteMaxValue, stepValue);
@@ -105,7 +105,7 @@ public final class InlineRangeSeekBarPreference extends Preference {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         prefs.edit().putInt(keyMinValue, currentMinValue).commit();
         prefs.edit().putInt(keyMaxValue, currentMaxValue).commit();
-        Log.i("RangeSeekBarPreference", "persistPreferences: " + generateValueString());
+        // Log.i("RangeSeekBarPreference", "persistPreferences: " + generateValueString());
         notifyChanged();
     }
 
@@ -113,7 +113,7 @@ public final class InlineRangeSeekBarPreference extends Preference {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         currentMinValue = readIntegerPref(prefs, keyMinValue, defaultMinValue);
         currentMaxValue = readIntegerPref(prefs, keyMaxValue, defaultMaxValue);
-        Log.i("RangeSeekBarPreference", "readPreferences: " + generateValueString());
+        // Log.i("RangeSeekBarPreference", "readPreferences: " + generateValueString());
     }
 
     private static int readIntegerPref(final SharedPreferences prefs, final String key, final int defaultValue) {

@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +78,9 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         if (titleView != null) {
             titleView.setText(getTitle());
             titleView.setTextColor(colorStateList);
-            Log.i("Titleview", "" + titleView.getText());
+            // Log.i("Titleview", "" + titleView.getText());
         } else {
-            Log.i("Titleview", "null");
+            // Log.i("Titleview", "null");
         }
 
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);

@@ -36,7 +36,6 @@ import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -190,10 +189,10 @@ public class RangeSeekBar<T extends Number>extends ImageView {
             getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, tValue, true);
             if (tValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && tValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
                 // windowBackground is a color
-                Log.i("RangeSeekBar", "Theme AccentColor found");
+                // Log.i("RangeSeekBar", "Theme AccentColor found");
                 activeColor = tValue.data;
             } else {
-                Log.i("RangeSeekBar", "Theme AccentColor not found");
+                // Log.i("RangeSeekBar", "Theme AccentColor not found");
                 activeColor = ACTIVE_COLOR;
             }
             textAboveThumbsColor = Color.WHITE;
@@ -215,10 +214,10 @@ public class RangeSeekBar<T extends Number>extends ImageView {
                 getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, tValue, true);
                 if (tValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && tValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
                     // windowBackground is a color
-                    Log.i("RangeSeekBar", "Theme AccentColor found");
+                    // Log.i("RangeSeekBar", "Theme AccentColor found");
                     activeColor = tValue.data;
                 } else {
-                    Log.i("RangeSeekBar", "Theme AccentColor not found");
+                    // Log.i("RangeSeekBar", "Theme AccentColor not found");
                     activeColor = a.getColor(R.styleable.RangeSeekBar_activeColor, ACTIVE_COLOR);
                 }
                 textAboveThumbsColor = a.getColor(R.styleable.RangeSeekBar_textAboveThumbsColor, Color.WHITE);
@@ -667,7 +666,13 @@ public class RangeSeekBar<T extends Number>extends ImageView {
         rect.right = normalizedToScreen(normalizedMaxValue);
 
         paint.setColor(colorToUseForButtonsAndHighlightedLine);
+        if (isEnabled()) {
+            paint.setAlpha(255);
+        } else {
+            paint.setAlpha(100);
+        }
         canvas.drawRect(rect, paint);
+        paint.setAlpha(255);
 
         // draw minimum thumb (& shadow if requested) if not a single thumb control
         if (!singleThumb) {
