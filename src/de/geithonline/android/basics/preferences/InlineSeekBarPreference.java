@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,28 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         readPreferences();
     }
 
+    private int getAccentColor() {
+        final TypedValue tValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.colorAccent, tValue, true);
+        if (tValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && tValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+            // windowBackground is a color
+            // Log.i("RangeSeekBar", "Theme AccentColor found");
+            return tValue.data;
+        } else {
+            // Log.i("RangeSeekBar", "Theme AccentColor not found");
+            return Color.WHITE;
+        }
+
+    }
+
+    private ColorStateList getColorStateListAccentColor() {
+        final int acc = getAccentColor();
+        final int accTrans = Color.argb(64, Color.red(acc), Color.green(acc), Color.blue(acc));
+        final int[] colors = new int[] { acc, accTrans, Color.GREEN, Color.BLUE };
+        final ColorStateList colorStateList = new ColorStateList(states, colors);
+        return colorStateList;
+    }
+
     @Override
     protected View onCreateView(final ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,6 +97,9 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         minTextView = (TextView) view.findViewById(R.id.min_value);
         maxTextView = (TextView) view.findViewById(R.id.max_value);
         titleView = (TextView) view.findViewById(R.id.title);
+
+        // setting accent color to valuetextview
+        valueTextView.setTextColor(getColorStateListAccentColor());
 
         if (titleView != null) {
             titleView.setText(getTitle());
