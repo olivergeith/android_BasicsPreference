@@ -3,6 +3,8 @@ package de.geithonline.android.basics.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar;
 import de.geithonline.android.basics.widgets.rangeseekbar.RangeSeekBar.OnRangeSeekBarChangeListener;
 
@@ -35,6 +38,16 @@ public final class InlineRangeSeekBarPreference extends Preference {
     private final String keyMaxValue;
     private final int defaultMaxValue;
     private final int defaultMinValue;
+    private TextView titleView;
+    private static final int[][] states = new int[][] { //
+            new int[] { android.R.attr.state_enabled }, // enabled
+            new int[] { -android.R.attr.state_enabled }, // disabled
+            new int[] { -android.R.attr.state_checked }, // unchecked
+            new int[] { android.R.attr.state_pressed } // pressed
+    };
+
+    private static final int[] colors = new int[] { Color.WHITE, Color.argb(64, 255, 255, 255), Color.GREEN, Color.BLUE };
+    private static final ColorStateList colorStateList = new ColorStateList(states, colors);
 
     public InlineRangeSeekBarPreference(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -56,6 +69,17 @@ public final class InlineRangeSeekBarPreference extends Preference {
         final View view = inflater.inflate(R.layout.inline_range_seekbar_preference, parent, false);
         readPreferences();
         rangeSeekBar = (RangeSeekBar<Integer>) view.findViewById(R.id.rangebar);
+
+        titleView = (TextView) view.findViewById(R.id.title);
+
+        if (titleView != null) {
+            titleView.setText(getTitle());
+            titleView.setTextColor(colorStateList);
+            Log.i("Titleview", "" + titleView.getText());
+        } else {
+            Log.i("Titleview", "null");
+        }
+
         rangeSeekBar.setRangeValues(absoluteMinValue, absoluteMaxValue, stepValue);
         rangeSeekBar.setSelectedMinValue(currentMinValue);
         rangeSeekBar.setSelectedMaxValue(currentMaxValue);

@@ -3,10 +3,13 @@ package de.geithonline.android.basics.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +34,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
     private static final int DEFAULT_STEP_VALUE = 1;
 
     private SeekBar mSeekBar;
-    private TextView mValueText;
+    private TextView valueTextView;
     // Real defaults
     private final int mDefaultValue;
     private final int mMaxValue;
@@ -39,8 +42,20 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
     private final int mStepValue;
     // Current value
     private int mCurrentValue;
-    private TextView mMinText;
-    private TextView mMaxText;
+    private TextView minTextView;
+    private TextView maxTextView;
+    private TextView titleView;
+
+    private static final int[][] states = new int[][] { //
+            new int[] { android.R.attr.state_enabled }, // enabled
+            new int[] { -android.R.attr.state_enabled }, // disabled
+            new int[] { -android.R.attr.state_checked }, // unchecked
+            new int[] { android.R.attr.state_pressed } // pressed
+    };
+
+    private static final int[] colors = new int[] { Color.WHITE, Color.argb(64, 255, 255, 255), Color.GREEN, Color.BLUE };
+
+    private static final ColorStateList colorStateList = new ColorStateList(states, colors);
 
     public InlineSeekBarPreference(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -50,17 +65,24 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE, DEFAULT_CURRENT_VALUE);
         // Get current value from preferences
         readPreferences();
-        // Log.i("InlineSeek " + getTitle().toString(), "Construcktor - key= " + getKey() + "shouldPersist=" + shouldPersist());
-        // Log.i("InlineSeek " + getTitle().toString(), "Construcktor - current= " + mCurrentValue);
     }
 
     @Override
     protected View onCreateView(final ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.inline_seekbar_preference2, parent, false);
-        mValueText = (TextView) view.findViewById(R.id.current_value);
-        mMinText = (TextView) view.findViewById(R.id.min_value);
-        mMaxText = (TextView) view.findViewById(R.id.max_value);
+        valueTextView = (TextView) view.findViewById(R.id.current_value);
+        minTextView = (TextView) view.findViewById(R.id.min_value);
+        maxTextView = (TextView) view.findViewById(R.id.max_value);
+        titleView = (TextView) view.findViewById(R.id.title);
+
+        if (titleView != null) {
+            titleView.setText(getTitle());
+            titleView.setTextColor(colorStateList);
+            Log.i("Titleview", "" + titleView.getText());
+        } else {
+            Log.i("Titleview", "null");
+        }
 
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
         // Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
@@ -68,9 +90,9 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         mSeekBar.setProgress(mCurrentValue - mMinValue);
         mSeekBar.setOnSeekBarChangeListener(this);
         // Setup text label for current value
-        mValueText.setText(Integer.toString(mCurrentValue));
-        mMinText.setText(Integer.toString(mMinValue));
-        mMaxText.setText(Integer.toString(mMaxValue));
+        valueTextView.setText(Integer.toString(mCurrentValue));
+        minTextView.setText(Integer.toString(mMinValue));
+        maxTextView.setText(Integer.toString(mMaxValue));
         // Get current value from preferences
         readPreferences();
         return view;
@@ -92,7 +114,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         mSeekBar.setProgress(value);
         mCurrentValue = value + mMinValue;
         // Update label with current value
-        mValueText.setText(Integer.toString(mCurrentValue));
+        valueTextView.setText(Integer.toString(mCurrentValue));
     }
 
     @Override
