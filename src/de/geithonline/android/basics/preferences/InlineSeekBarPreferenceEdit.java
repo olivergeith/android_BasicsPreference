@@ -122,12 +122,11 @@ public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBar
         editView.setOnFocusChangeListener(this);
 
         // Setup text label for current value
-        editView.setText(Integer.toString(mCurrentValue));
+        // Get current value from preferences
+        readPreferences();
         editView.setText(Integer.toString(mCurrentValue));
         minTextView.setText(Integer.toString(mMinValue));
         maxTextView.setText(Integer.toString(mMaxValue));
-        // Get current value from preferences
-        readPreferences();
         return view;
     }
 
