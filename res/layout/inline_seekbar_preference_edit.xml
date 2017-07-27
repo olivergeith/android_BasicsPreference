@@ -21,16 +21,16 @@
             android:text="title"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/current_value"
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.15"
-            android:gravity="right"
-            android:text="50"
-            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/editValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:freezesText="false"
+            android:inputType="numberSigned"
+            android:text="1000"
+            android:textSize="14sp" >
+        </EditText>
     </LinearLayout>
 
     <LinearLayout
@@ -54,8 +54,7 @@
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="6dp"
-            android:layout_weight="0.75"
-            />
+            android:layout_weight="0.75" />
 
         <TextView
             android:id="@+id/max_value"
