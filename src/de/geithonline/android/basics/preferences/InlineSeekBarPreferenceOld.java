@@ -11,36 +11,21 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
-public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBarChangeListener, OnEditorActionListener, OnFocusChangeListener {
+public class InlineSeekBarPreferenceOld extends Preference implements OnSeekBarChangeListener {
     private static final String PREFERENCE_NS = "http://schemas.android.com/apk/lib/de.geithonline.android.basics.preferences";
     private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
-    // Attribute names
-    private static final String ATTR_DEFAULT_VALUE = "defaultValue";
-    private static final String ATTR_MIN_VALUE = "minValue";
-    private static final String ATTR_MAX_VALUE = "maxValue";
-    private static final String ATTR_STEP_VALUE = "stepValue";
-
     // Default values for defaults
-    private static final int DEFAULT_CURRENT_VALUE = 50;
-    private static final int DEFAULT_MIN_VALUE = 0;
-    private static final int DEFAULT_MAX_VALUE = 100;
-    private static final int DEFAULT_STEP_VALUE = 1;
-
     private SeekBar mSeekBar;
+    private TextView valueTextView;
     // Real defaults
     private final int mDefaultValue;
     private final int mMaxValue;
@@ -51,7 +36,11 @@ public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBar
     private TextView minTextView;
     private TextView maxTextView;
     private TextView titleView;
-    private EditText editView;
+
+    private boolean zoomed = false;
+    private final int mMinZoomValue;
+    private final int mMaxZoomValue;
+    private final int mStepZoomValue;
 
     private static final int[][] states = new int[][] { //
             new int[] { android.R.attr.state_enabled }, // enabled
@@ -64,12 +53,15 @@ public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBar
 
     private static final ColorStateList colorStateList = new ColorStateList(states, colors);
 
-    public InlineSeekBarPreferenceEdit(final Context context, final AttributeSet attrs) {
+    public InlineSeekBarPreferenceOld(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-        mMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIN_VALUE, DEFAULT_MIN_VALUE);
-        mMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MAX_VALUE, DEFAULT_MAX_VALUE);
-        mStepValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_STEP_VALUE, DEFAULT_STEP_VALUE);
-        mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE, DEFAULT_CURRENT_VALUE);
+        mMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, "minValue", 0);
+        mMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, "maxValue", 100);
+        mStepValue = attrs.getAttributeIntValue(PREFERENCE_NS, "stepValue", 1);
+        mMinZoomValue = attrs.getAttributeIntValue(PREFERENCE_NS, "minZoomValue", mMinValue);
+        mMaxZoomValue = attrs.getAttributeIntValue(PREFERENCE_NS, "maxZoomValue", mMaxValue);
+        mStepZoomValue = attrs.getAttributeIntValue(PREFERENCE_NS, "stepZoomValue", mStepValue);
+        mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, "defaultValue", 50);
         // Get current value from preferences
         readPreferences();
     }
@@ -99,35 +91,75 @@ public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBar
     @Override
     protected View onCreateView(final ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.inline_seekbar_preference_edit, parent, false);
+        final View view = inflater.inflate(R.layout.inline_seekbar_preference2, parent, false);
+        valueTextView = (TextView) view.findViewById(R.id.current_value);
         minTextView = (TextView) view.findViewById(R.id.min_value);
         maxTextView = (TextView) view.findViewById(R.id.max_value);
         titleView = (TextView) view.findViewById(R.id.title);
-        editView = (EditText) view.findViewById(R.id.editValue);
+
         // setting accent color to valuetextview
-        editView.setTextColor(getColorStateListAccentColor());
-        editView.setMaxLines(1);
+        valueTextView.setTextColor(getColorStateListAccentColor());
+
         if (titleView != null) {
             titleView.setText(getTitle());
             titleView.setTextColor(colorStateList);
         } else {}
 
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
-        // Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
-        mSeekBar.setMax(mMaxValue - mMinValue);
-        mSeekBar.setProgress(mCurrentValue - mMinValue);
-        // register listeners
-        mSeekBar.setOnSeekBarChangeListener(this);
-        editView.setOnEditorActionListener(this);
-        editView.setOnFocusChangeListener(this);
 
+        valueTextView.setClickable(true);
+        valueTextView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                zoom(!zoomed);
+            }
+        });
+        // Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
+        mSeekBar.setOnSeekBarChangeListener(this);
         // Setup text label for current value
+        valueTextView.setText(Integer.toString(mCurrentValue));
+        zoom(zoomed);
+        setProgressBarAndLabel(mCurrentValue);
+
         // Get current value from preferences
         readPreferences();
-        editView.setText(Integer.toString(mCurrentValue));
-        minTextView.setText(Integer.toString(mMinValue));
-        maxTextView.setText(Integer.toString(mMaxValue));
         return view;
+    }
+
+    private void zoom(final boolean zoomed) {
+        Log.i("InlineSeek", "Zooming: " + zoomed);
+        this.zoomed = zoomed;
+        if (zoomed == true) {
+            // zooming
+            maxTextView.setText(Integer.toString(mMaxZoomValue));
+            minTextView.setText(Integer.toString(mMinZoomValue));
+            if (mCurrentValue > mMaxZoomValue) {
+                mCurrentValue = mMaxZoomValue;
+            }
+            if (mCurrentValue < mMinZoomValue) {
+                mCurrentValue = mMinZoomValue;
+            }
+            Log.i("zoomin on ", "current = " + mCurrentValue);
+            setProgressBarAndLabel(mCurrentValue);
+        } else {
+            // zooming out
+            maxTextView.setText(Integer.toString(mMaxValue));
+            minTextView.setText(Integer.toString(mMinValue));
+            setProgressBarAndLabel(mCurrentValue);
+        }
+
+    }
+
+    private void setProgressBarAndLabel(final int val) {
+        if (zoomed) {
+            mSeekBar.setMax(mMaxZoomValue - mMinZoomValue);
+            mSeekBar.setProgress(val - mMinZoomValue);
+        } else {
+            mSeekBar.setMax(mMaxValue - mMinValue);
+            mSeekBar.setProgress(val - mMinValue);
+        }
+        valueTextView.setText(Integer.toString(mCurrentValue));
     }
 
     @Override
@@ -135,61 +167,23 @@ public class InlineSeekBarPreferenceEdit extends Preference implements OnSeekBar
         super.onBindView(view);
         // Log.i("InlineSeek " + getTitle().toString(), "onBindView - cureent " + mCurrentValue);
         readPreferences();
-        mSeekBar.setProgress(mCurrentValue - mMinValue);
-    }
-
-    @Override
-    public void onFocusChange(final View v, final boolean hasFocus) {
-        Log.i("EditMode", "Focus = " + hasFocus);
-        if (!hasFocus) {
-            // calculate();
-        }
-    }
-
-    @Override
-    public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
-        Log.i("EditText", "actionId = " + actionId);
-
-        // if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-            int val = Integer.parseInt(editView.getText().toString());
-            if (val > mMaxValue) {
-                val = mMaxValue;
-            }
-            if (val < mMinValue) {
-                val = mMinValue;
-            }
-            mCurrentValue = val;
-            mSeekBar.setProgress(mCurrentValue - mMinValue);
-
-            Log.i("EditText", "Value = " + mCurrentValue);
-            // enableEditMode(false);
-
-            persistPreferences();
-            return true;
-        }
-        return false;
-    }
-
-    private void enableKeyboard(final EditText editText, final boolean show) {
-        final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (show) {
-            imm.showSoftInputFromInputMethod(editText.getWindowToken(), 0);
-        } else {
-            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-        }
-
+        setProgressBarAndLabel(mCurrentValue);
+        // mSeekBar.setMax(mMaxValue - mMinValue);
     }
 
     @Override
     public void onProgressChanged(final SeekBar seek, int value, final boolean fromTouch) {
         // Update current value
-        value = (Math.round(value / mStepValue)) * mStepValue;
-        mSeekBar.setProgress(value);
-        mCurrentValue = value + mMinValue;
-        // Update label with current value
-        editView.setText(Integer.toString(mCurrentValue));
-        editView.setText(Integer.toString(mCurrentValue));
+        if (zoomed) {
+            // snap value to step-grid
+            value = (Math.round(value / mStepZoomValue)) * mStepZoomValue;
+            mCurrentValue = value + mMinZoomValue;
+        } else {
+            // snap value to step-grid
+            value = (Math.round(value / mStepValue)) * mStepValue;
+            mCurrentValue = value + mMinValue;
+        }
+        setProgressBarAndLabel(mCurrentValue);
     }
 
     @Override

@@ -5,7 +5,20 @@ Copyright 2012 Jay Weisskopf
 Licensed under the MIT License (see LICENSE.txt)
 -->
 <resources>
-
+    
+    <declare-styleable name="Joystick">
+        <attr name="start_on_first_touch" format="boolean" />
+        <attr name="force_square" format="boolean" />
+        <attr name="radius" format="dimension" />
+        <attr name="motion_constraint" format="enum">
+            <enum name="None" value="0" />
+            <enum name="Horizontal" value="1" />
+            <enum name="Vertical" value="2" />
+        </attr>
+    </declare-styleable>
+    
+    
+    
     <declare-styleable name="HueSeekBar">
         <attr name="colorEmpty" format="color" />
         <attr name="colorFill" format="color" />
