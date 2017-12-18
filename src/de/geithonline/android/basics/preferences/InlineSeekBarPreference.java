@@ -103,7 +103,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
         if (titleView != null) {
             titleView.setText(getTitle());
             titleView.setTextColor(colorStateList);
-        } else {}
+        }
 
         mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
 
@@ -115,6 +115,23 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
                 zoom(!zoomed);
             }
         });
+        minTextView.setClickable(true);
+        maxTextView.setClickable(true);
+        minTextView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                stepDown();
+            }
+        });
+        maxTextView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                stepUp();
+            }
+        });
+
         // Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
         mSeekBar.setOnSeekBarChangeListener(this);
         // Setup text label for current value
@@ -149,6 +166,38 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
             setProgressBarAndLabel(mCurrentValue);
         }
 
+    }
+
+    protected void stepUp() {
+        if (zoomed == true) {
+            mCurrentValue = mCurrentValue + mStepZoomValue;
+            if (mCurrentValue > mMaxZoomValue) {
+                mCurrentValue = mMaxZoomValue;
+            }
+        } else {
+            mCurrentValue = mCurrentValue + mStepValue;
+            if (mCurrentValue > mMaxValue) {
+                mCurrentValue = mMaxValue;
+            }
+        }
+        setProgressBarAndLabel(mCurrentValue);
+        persistPreferences();
+    }
+
+    protected void stepDown() {
+        if (zoomed == true) {
+            mCurrentValue = mCurrentValue - mStepZoomValue;
+            if (mCurrentValue < mMinZoomValue) {
+                mCurrentValue = mMinZoomValue;
+            }
+        } else {
+            mCurrentValue = mCurrentValue - mStepValue;
+            if (mCurrentValue < mMinValue) {
+                mCurrentValue = mMinValue;
+            }
+        }
+        setProgressBarAndLabel(mCurrentValue);
+        persistPreferences();
     }
 
     private void setProgressBarAndLabel(final int val) {
