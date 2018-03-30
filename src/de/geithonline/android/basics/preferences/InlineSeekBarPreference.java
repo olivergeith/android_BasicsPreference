@@ -144,7 +144,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 		// Log.i("InlineSeek " + getTitle().toString(), "onCreateView - current= " + mCurrentValue);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		// Setup text label for current value
-		valueTextView.setText(Integer.toString(mCurrentValue));
+		valueTextView.setText(Integer.toString(mCurrentValue) + unit);
 		zoom(zoomed);
 		setProgressBarAndLabel(mCurrentValue);
 
