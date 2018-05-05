@@ -2,6 +2,7 @@ package de.geithonline.android.basics.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -51,6 +52,23 @@ public class Alerter {
 			bld.setNeutralButton("OK", null);
 		}
 		bld.create().show();
+	}
+
+	public static void alertYesNo(final Context activity, final String msg, final String title, final DialogInterface.OnClickListener yesListener) {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setTitle(title);
+		builder.setMessage(msg);
+		builder.setIcon(android.R.drawable.ic_menu_help);
+		builder.setPositiveButton("YES", yesListener);
+		builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(final DialogInterface dialog, final int which) {
+				dialog.dismiss();
+			}
+		});
+
+		final AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 }

@@ -2,6 +2,7 @@
 package de.geithonline.android.basics.preferences;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -14,10 +15,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import de.geithonline.android.basics.utils.Alerter;
 
 public class InlineSeekBarPreference extends Preference implements OnSeekBarChangeListener {
 	private static final String PREFERENCE_NS = "http://schemas.android.com/apk/lib/de.geithonline.android.basics.preferences";
@@ -113,6 +116,24 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 			titleView.setText(getTitle());
 			titleView.setTextColor(colorStateList);
 		}
+
+		titleView.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(final View v) {
+				if (mCurrentValue != mDefaultValue) {
+					Alerter.alertYesNo(view.getContext(), getTitle().toString(), "Reset to default value", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(final DialogInterface dialog, final int which) {
+							mCurrentValue = mDefaultValue;
+							setProgressBarAndLabel(mCurrentValue);
+							persistPreferences();
+						}
+					});
+				}
+				return false;
+			}
+		});
 
 		mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
 
