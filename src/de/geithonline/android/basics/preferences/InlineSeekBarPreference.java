@@ -35,7 +35,7 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 	private final int mMinValue;
 	private final int mStepValue;
 	// Current value
-	private int mCurrentValue;
+	private int mCurrentValue = 0;
 	private TextView minTextView;
 	private TextView maxTextView;
 	private TextView titleView;
@@ -167,15 +167,15 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 		// Setup text label for current value
 		valueTextView.setText(Integer.toString(mCurrentValue) + unit);
 		zoom(zoomed);
-		setProgressBarAndLabel(mCurrentValue);
 
 		// Get current value from preferences
 		readPreferences();
+		setProgressBarAndLabel(mCurrentValue);
 		return view;
 	}
 
 	private void zoom(final boolean zoomed) {
-		Log.i("InlineSeek", "Zooming: " + zoomed);
+		// Log.i("InlineSeek", "Zooming: " + zoomed);
 		this.zoomed = zoomed;
 		if (zoomed == true) {
 			// zooming
@@ -231,6 +231,9 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 	}
 
 	private void setProgressBarAndLabel(final int val) {
+		if (mSeekBar == null || valueTextView == null) {
+			return;
+		}
 		if (zoomed) {
 			mSeekBar.setMax(mMaxZoomValue - mMinZoomValue);
 			mSeekBar.setProgress(val - mMinZoomValue);
@@ -245,14 +248,14 @@ public class InlineSeekBarPreference extends Preference implements OnSeekBarChan
 		}
 	}
 
-	@Override
-	protected void onBindView(final View view) {
-		super.onBindView(view);
-		// Log.i("InlineSeek " + getTitle().toString(), "onBindView - cureent " + mCurrentValue);
-		readPreferences();
-		setProgressBarAndLabel(mCurrentValue);
-		// mSeekBar.setMax(mMaxValue - mMinValue);
-	}
+	// @Override
+	// protected void onBindView(final View view) {
+	// super.onBindView(view);
+	// // Log.i("InlineSeek " + getTitle().toString(), "onBindView - cureent " + mCurrentValue);
+	// readPreferences();
+	// setProgressBarAndLabel(mCurrentValue);
+	// // mSeekBar.setMax(mMaxValue - mMinValue);
+	// }
 
 	@Override
 	public void onProgressChanged(final SeekBar seek, int value, final boolean fromTouch) {
